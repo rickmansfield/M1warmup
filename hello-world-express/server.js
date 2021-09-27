@@ -12,8 +12,31 @@ server.use(express.json());
 // });
 
 server.get('/hobbits', (req, res) => {
-    res.send('Welcome to Hobbiton');
-}) // READ data
+    // query string parameters get added to req.query
+    console.log('req.query');
+    const sortField = req.query.sortby || 'id';
+    const hobbits = [
+        {
+            id: 1,
+            name: 'Samwise Gamgee',
+        },
+        {
+            id: 2,
+            name: 'Frodo Baggins',
+        },
+        {
+            id: 2,
+            name: 'Bilbo Baggins',
+        },
+    ];
+
+    // apply the sorting
+    const response = hobbits.sort(
+        (a, b) => (a[sortField] < b[sortField] ? -1 : 1)
+    );
+
+    res.status(200).json(response);
+}); // READ data
 
 server.post('/hobbits', (req, res) => {
     res.status(201).json({ url: '/hobbis', oeration: 'POST' });
