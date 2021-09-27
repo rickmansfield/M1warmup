@@ -11,20 +11,26 @@ server.use(express.json());
 //     res.end("Hello World from Node\n"); // end the request and send a response with the specified message
 // });
 
-server.get('/hobbits', (req, res)=> {
+server.get('/hobbits', (req, res) => {
     res.send('Welcome to Hobbiton');
 }) // READ data
 
-server.post('/hobbits', (req, res) =>{
-    res.status(201).json({ url: '/hobbis', oeration: 'POST'});
+server.post('/hobbits', (req, res) => {
+    res.status(201).json({ url: '/hobbis', oeration: 'POST' });
 }); //CREAT data
 
-server.put('/hobbits', (req, res) =>{
-    res.status(200).json({url: '/hobbits', operation: 'PUT' });
+server.put('/hobbits', (req, res) => {
+    res.status(200).json({ url: '/hobbits', operation: 'PUT' });
 })// UPDATE data
 
-server.delete('/hobbits', (req, res) => {
-    res.sendStatus(204);
+server.delete('/hobbits/:id', (req, res) => {
+    const id = req.params.id;
+    console.log(req.params);
+    // or we could destructure it like so: const { id } = req.params;
+    res.status(200).json({
+        url: `/hobbits/${id}`,
+        operation: `DELETE for hobbit with id ${id}`,
+    });
 }); //Destroying/DELETEING data
 
 server.listen(port, () => {
