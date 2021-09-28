@@ -10,6 +10,19 @@ server.use(express.json());
 //     res.setHeader("Content-Type", "text/plain"); // inform the client that we'll be returning text
 //     res.end("Hello World from Node\n"); // end the request and send a response with the specified message
 // });
+let hobbits = [
+    {
+        id: 1,
+        name: 'Bilbo Baggins',
+        age: 111,
+    },
+    {
+        id: 2,
+        name: 'Frodo Baggins',
+        age: 33,
+    },
+];
+let nextId = 3;
 
 server.get('/hobbits', (req, res) => {
     // query string parameters get added to req.query
@@ -24,10 +37,7 @@ server.get('/hobbits', (req, res) => {
             id: 2,
             name: 'Frodo Baggins',
         },
-        {
-            id: 2,
-            name: 'Bilbo Baggins',
-        },
+
     ];
 
     // apply the sorting
@@ -39,7 +49,12 @@ server.get('/hobbits', (req, res) => {
 }); // READ data
 
 server.post('/hobbits', (req, res) => {
-    res.status(201).json({ url: '/hobbis', oeration: 'POST' });
+    const hobbit = req.body;
+    hobbit.id = nextId++;
+
+    hobbits.push(hobbit);
+
+    res.status(201).json(hobbits);
 }); //CREAT data
 
 server.put('/hobbits', (req, res) => {
