@@ -10,6 +10,36 @@ server.use(express.json());
 //     res.setHeader("Content-Type", "text/plain"); // inform the client that we'll be returning text
 //     res.end("Hello World from Node\n"); // end the request and send a response with the specified message
 // });
+// server.use(function (req, res) {
+//     res.status(404).send(`Ain't nobody go time for dat!`)
+// });
+function logger(req, res, next) {
+    console.log(`[${new Date().toISOString()}] ${req.method} to ${req.url} ${req.get(`Origin`)}`);
+    next();
+}
+
+function atGate(req, res, next){
+    console.log('at the gate about to be eatern');
+    next();
+}
+
+function auth(req, res, next){
+    if(req.url === '/mellon'){
+        next();
+    } else {
+        res.send('You shall not pass!');
+    }
+}
+
+server.use(logger);//global middleware
+server.use(atGate);//global
+//local middleware
+server.get('/mellon', auth, (req, res) => {
+    console.log('Gate opening...');
+    console.log('Inside and safe!');
+    res.send(`Welcome Traveler!`);
+})
+
 let hobbits = [
     {
         id: 1,
@@ -48,6 +78,8 @@ server.get('/hobbits', (req, res) => {
     res.status(200).json(response);
 }); // READ data
 
+
+
 server.post('/hobbits', (req, res) => {
     const hobbit = req.body;
     hobbit.id = nextId++;
@@ -70,6 +102,10 @@ server.delete('/hobbits/:id', (req, res) => {
         operation: `DELETE for hobbit with id ${id}`,
     });
 }); //Destroying/DELETEING data
+
+server.use(function (req, res) {
+    res.status(404).send(`Ain't nobody go time for dat!`)
+});
 
 server.listen(port, () => {
     // start watching for connections on the port specified
